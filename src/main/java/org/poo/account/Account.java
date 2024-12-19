@@ -1,6 +1,6 @@
 package org.poo.account;
 
-import org.poo.Card;
+import org.poo.Components.Card;
 
 import java.util.ArrayList;
 

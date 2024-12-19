@@ -3,15 +3,15 @@ package org.poo.main;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import org.poo.User;
+import org.poo.Components.User;
 import org.poo.checker.Checker;
 import org.poo.checker.CheckerConstants;
 import org.poo.fileio.ObjectInput;
 import org.poo.fileio.UserInput;
 import org.poo.fileio.ExchangeInput;
 import org.poo.fileio.CommandInput;
-import org.poo.ExchangeRate;
-import org.poo.Bank;
+import org.poo.Components.ExchangeRate;
+import org.poo.Components.Bank;
 import org.poo.utils.Utils;
 
 import java.io.File;
@@ -82,10 +82,8 @@ public final class Main {
 
         ArrayNode output = objectMapper.createArrayNode();
 
-        // Resetează generatorul de IBAN și CardNumber înainte de fiecare test
         Utils.resetRandom();
 
-        // Extrage utilizatorii din input
         ArrayList<User> usersList = new ArrayList<>();
         for (UserInput userInput : inputData.getUsers()) {
             User user = new User(userInput.getFirstName(),
@@ -93,7 +91,6 @@ public final class Main {
             usersList.add(user);
         }
 
-        // Extrage cursurile de schimb valutar
         ArrayList<ExchangeRate> exchangeRatesList = new ArrayList<>();
         for (ExchangeInput exchangeInput : inputData.getExchangeRates()) {
             ExchangeRate exchangeRate = new ExchangeRate(exchangeInput.getFrom(),
@@ -101,16 +98,13 @@ public final class Main {
             exchangeRatesList.add(exchangeRate);
         }
 
-        // Pregătește lista de comenzi
         ArrayNode outputArray = objectMapper.createArrayNode();
         Bank bank = new Bank();
         CommandInput[] commandsArray = inputData.getCommands();
         ArrayList<CommandInput> commandsList = new ArrayList<>(Arrays.asList(commandsArray));
 
-        // Procesează comenzile
         bank.banking(usersList, exchangeRatesList, commandsList, outputArray);
 
-        // Scrie rezultatul în fișierul de output
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePath2), outputArray);
     }

@@ -1,7 +1,7 @@
 package org.poo.account;
 
 import lombok.Data;
-import org.poo.Card;
+import org.poo.Components.Card;
 import org.poo.utils.Utils;
 
 import java.util.ArrayList;
